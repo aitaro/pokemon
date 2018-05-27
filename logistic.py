@@ -6,17 +6,22 @@ from sklearn.model_selection import train_test_split
 data = pd.read_csv('buttle_data.csv')
 test_data = pd.read_csv('buttle_data.csv')
 
+## 変数
+c = 1
+
+
+
 data = data.drop('Unnamed: 0', axis=1)
 data.head()
 
-data_train, data_test = train_test_split(data, test_size=0.3)
+data_train, data_test = train_test_split(data, test_size=0.3, random_state=0)
 
 X_train = data_train.drop(['Win?'], axis=1)
 Y_train = data_train['Win?']
 X_test = data_test.drop(['Win?'], axis=1)
 Y_test = data_test['Win?']
 
-clf = LogisticRegression()
+clf = LogisticRegression(C=c)
 clf.fit(X_train, Y_train)
 predicted = pd.DataFrame({'LogisPredicted':clf.predict(X_test)})
 
