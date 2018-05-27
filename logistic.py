@@ -9,7 +9,7 @@ test_data = pd.read_csv('buttle_data.csv')
 data = data.drop('Unnamed: 0', axis=1)
 data.head()
 
-data_train, data_test = train_test_split(data, test_size=0.2)
+data_train, data_test = train_test_split(data, test_size=0.3)
 
 X_train = data_train.drop(['Win?'], axis=1)
 Y_train = data_train['Win?']
