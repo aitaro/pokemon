@@ -9,7 +9,7 @@ test_data = pd.read_csv('buttle_data.csv')
 data = data.drop('Unnamed: 0', axis=1)
 data.head()
 
-data_train, data_test = train_test_split(data)
+data_train, data_test = train_test_split(data, test_size=0.2)
 
 X_train = data_train.drop(['Win?'], axis=1)
 Y_train = data_train['Win?']
@@ -38,3 +38,7 @@ def logloss(predicted):
     return - sum / len(predicted.index)
 
 print(logloss(predicted))
+
+f = open('result.txt', 'w') # 書き込みモードで開く
+f.write(str(logloss(predicted))) # 引数の文字列をファイルに書き込む
+f.close() # ファイルを閉じる
