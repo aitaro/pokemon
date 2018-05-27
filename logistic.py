@@ -7,8 +7,8 @@ data = pd.read_csv('buttle_data.csv')
 test_data = pd.read_csv('buttle_data.csv')
 
 ## 変数
-c = 1
-n = 3
+c = 1000
+n = 1
 
 
 data = data.drop('Unnamed: 0', axis=1)
@@ -23,7 +23,7 @@ Y_test = data_test['Win?']
 
 clf = LogisticRegression(C=c)
 clf.fit(X_train, Y_train)
-predicted = pd.DataFrame({'LogisPredicted':clf.predict(X_test)})
+predicted = pd.DataFrame({'expect':Y_test})
 
 clf.score(X_test, Y_test)
 
@@ -33,13 +33,14 @@ def sigmoid(x):
 X_test_value = clf.decision_function(X_test)
 X_test_prob = sigmoid(X_test_value)
 actual = pd.Series(X_test_prob)
-predicted['actual'] = actual.values.tolist()
+predicted['probability'] = actual.values.tolist()
 
 
 def logloss(predicted):
     sum = 0
-    for i in predicted.index:
-        sum += (predicted.iat[i,0] * math.log(predicted.iat[i,1]) + (1-predicted.iat[i,0]) * math.log(1 - predicted.iat[i,1]))
+    for i in range(len(predicted.index)):
+        y_prediction = predicted.iat[i,1]
+        sum += (predicted.iat[i,0] * math.log(y_prediction) + (1-predicted.iat[i,0]) * math.log(1 - y_prediction))
     return - sum / len(predicted.index)
 
 print(logloss(predicted))
@@ -61,7 +62,7 @@ comp_test_data = comp_test_data.drop('Unnamed: 0', axis=1)
 
 comp_test_value = clf.decision_function(comp_test_data)
 comp_test_prob = sigmoid(comp_test_value)
-probability = pd.Series(comp_test_prob).round(5)
+probability = pd.Series(comp_test_prob).round(6)
 result = pd.DataFrame(probability.values.tolist(), columns=['probability'])
 result.index.name = "id"
-result.to_csv('submission.csv')
+result.to_csv('submission.csv', float_format='%.6f')

@@ -7,9 +7,9 @@ import math
 pokemon_data= pd.read_csv('pokemon.csv')
 
 # 変数
-bd = 0.6
-ng = 0.8
-gd = 1.3
+bd = 0.4
+ng = 0.7
+gd = 1.6
 
 
 #                1   2   3   4   5  #6   7   8   9  11  11  12  13  14  15  16  17  18
