@@ -47,3 +47,21 @@ print(logloss(predicted))
 f = open('result.txt', 'w') # 書き込みモードで開く
 f.write(str(logloss(predicted))) # 引数の文字列をファイルに書き込む
 f.close() # ファイルを閉じる
+
+
+
+####--------------
+# ここからテスト結果出力用
+comp_test_data = pd.read_csv('buttle_data_test.csv')
+
+comp_test_data = comp_test_data.drop('Unnamed: 0', axis=1)
+# print(comp_test_data.head())
+# result = pd.DataFrame(comp_test_data.index, columns=['id'])
+
+
+comp_test_value = clf.decision_function(comp_test_data)
+comp_test_prob = sigmoid(comp_test_value)
+probability = pd.Series(comp_test_prob).round(5)
+result = pd.DataFrame(probability.values.tolist(), columns=['probability'])
+result.index.name = "id"
+result.to_csv('submission.csv')
