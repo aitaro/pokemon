@@ -8,7 +8,7 @@ test_data = pd.read_csv('buttle_data.csv')
 
 ## 変数
 c = 1
-
+n = 1
 
 
 data = data.drop('Unnamed: 0', axis=1)
@@ -28,11 +28,11 @@ predicted = pd.DataFrame({'LogisPredicted':clf.predict(X_test)})
 clf.score(X_test, Y_test)
 
 def sigmoid(x):
-    return 1 / (1 + np.exp(-x)) # 0〜1.0
+    return 1 / (1 + np.exp(- (n * x))) # 0〜1.0
 
 X_test_value = clf.decision_function(X_test)
 X_test_prob = sigmoid(X_test_value)
-actual = pd.Series(X_test_prob).round(5)
+actual = pd.Series(X_test_prob).round(20)
 predicted['actual'] = actual.values.tolist()
 
 
