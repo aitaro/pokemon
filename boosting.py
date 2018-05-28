@@ -80,7 +80,7 @@ def modelfit(alg, dtrain, predictors, performCV=True, printFeatureImportance=Fal
 
 #Choose all predictors except target & IDcols
 predictors = [x for x in train.columns if x not in [target]]
-gbm0 = GradientBoostingClassifier(learning_rate=0.2, n_estimators=400, random_state=10)
+gbm0 = GradientBoostingClassifier(learning_rate=0.2, n_estimators=400, min_samples_split=800, max_depth=15, random_state=10)
 modelfit(gbm0, train, predictors)
 
 
@@ -124,7 +124,7 @@ mean_list = []
 for s in gsearch3.grid_scores_:
     mean_list.append(s[1])
 plt.figure(figsize=(4,2))
-plt.plot(list(range(30,71,10)), mean_list)
+plt.plot(list(range(10,51,10)), mean_list)
 plt.title("GridSearchCV Score")
 plt.xlabel("min_samples_leaf")
 plt.show()
