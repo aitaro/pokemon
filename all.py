@@ -1,2 +1,2 @@
-import main
+import main2
 import logistic

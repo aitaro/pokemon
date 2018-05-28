@@ -12,7 +12,6 @@ n = 1
 
 
 data = data.drop('Unnamed: 0', axis=1)
-data.head()
 
 data_train, data_test = train_test_split(data, test_size=0.3, random_state=0)
 
@@ -25,7 +24,7 @@ clf = LogisticRegression(C=c)
 clf.fit(X_train, Y_train)
 predicted = pd.DataFrame({'expect':Y_test})
 
-clf.score(X_test, Y_test)
+# print(clf.score(X_test, Y_test))
 
 def sigmoid(x):
     return 1 / (1 + np.exp(- (n * x))) # 0〜1.0

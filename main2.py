@@ -27,7 +27,12 @@ for i in buttle_data.index:
     First_Defense.append(pokemon_data.iat[buttle_data['First_pokemon'][i] - 1,6])
     First_Sp_Attack.append(pokemon_data.iat[buttle_data['First_pokemon'][i] - 1,7])
     First_Sp_Defense.append(pokemon_data.iat[buttle_data['First_pokemon'][i] - 1,8])
-    First_Speed.append(pokemon_data.iat[buttle_data['First_pokemon'][i] - 1,9])
+    f = pokemon_data.iat[buttle_data['First_pokemon'][i] - 1,9]
+    s = pokemon_data.iat[buttle_data['Second_pokemon'][i] - 1,9]
+    if f > s:
+        First_Speed.append(1)
+    else:
+        First_Speed.append(0)
 
 buttle_data['First_HP'] = First_HP
 buttle_data['First_Attack'] = First_Attack
@@ -51,14 +56,14 @@ for i in buttle_data.index:
     Second_Defense.append(pokemon_data.iat[buttle_data['Second_pokemon'][i] - 1,6])
     Second_Sp_Attack.append(pokemon_data.iat[buttle_data['Second_pokemon'][i] - 1,7])
     Second_Sp_Defense.append(pokemon_data.iat[buttle_data['Second_pokemon'][i] - 1,8])
-    Second_Speed.append(pokemon_data.iat[buttle_data['Second_pokemon'][i] - 1,9])
+    # Second_Speed.append(pokemon_data.iat[buttle_data['Second_pokemon'][i] - 1,9])
 
 buttle_data['Second_HP'] = Second_HP
 buttle_data['Second_Attack'] = Second_Attack
 buttle_data['Second_Defense'] = Second_Defense
 buttle_data['Second_Sp_Attack'] = Second_Sp_Attack
 buttle_data['Second_Sp_Defense'] = Second_Sp_Defense
-buttle_data['Second_Speed'] = Second_Speed
+# buttle_data['Second_Speed'] = Second_Speed
 # buttle_data['Second_all'] = (np.array(Second_HP) + np.array(Second_Attack) + np.array(Second_Defense) + np.array(Second_Sp_Attack) + np.array(Second_Sp_Defense) + np.array(Second_Speed))
 
 buttle_data['Win?'] = (buttle_data['First_pokemon'] == buttle_data['Winner'])
