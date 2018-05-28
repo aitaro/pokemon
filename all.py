@@ -1,3 +1,3 @@
 import main2
 import test2
-import logistic
+import boosting_main
