@@ -98,7 +98,7 @@ modelfit(gbm0, train, predictors)
 from mpl_toolkits.mplot3d import Axes3D
 import time
 start_time = time.time()
-param_test2 = {'max_depth':list(range(9,11,2)), 'min_samples_split':list(range(600,801,200))}
+param_test2 = {'max_depth':list(range(5,16,2)), 'min_samples_split':list(range(200,1001,200))}
 gsearch2 = GridSearchCV(estimator = GradientBoostingClassifier(learning_rate=0.2, n_estimators=400, max_features='sqrt', subsample=0.8, random_state=10),
 param_grid = param_test2, scoring='roc_auc',n_jobs=4,iid=False, cv=5)
 gsearch2.fit(train[predictors],train[target])
