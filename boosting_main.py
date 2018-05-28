@@ -95,9 +95,9 @@ def modelfit(alg, dtrain, predictors, performCV=True, printFeatureImportance=Fal
     result = pd.DataFrame(probability.values.tolist(), columns=['probability'])
     result.index.name = "id"
     result.to_csv('submission.csv', float_format='%.6f')
-        
+
 
 #Choose all predictors except target & IDcols
 predictors = [x for x in train.columns if x not in [target]]
-gbm0 = GradientBoostingClassifier(learning_rate=0.2, n_estimators=400, random_state=10)
+gbm0 = GradientBoostingClassifier(learning_rate=0.2, n_estimators=400, min_samples_split=800, max_depth=15, random_state=10)
 modelfit(gbm0, train, predictors)
