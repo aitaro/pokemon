@@ -31,7 +31,7 @@ train = data_train
 target = 'Win?'
 
 def sigmoid(x):
-    return 1 / (1 + np.exp(- (1 * x))) # 0〜1.0
+    return 1 / (1 + np.exp(- (1 * x)))
 
 def logloss(predicted):
     sum = 0
@@ -80,17 +80,38 @@ def modelfit(alg, dtrain, predictors, performCV=True, printFeatureImportance=Fal
 
 #Choose all predictors except target & IDcols
 predictors = [x for x in train.columns if x not in [target]]
-gbm0 = GradientBoostingClassifier(learning_rate=0.1, n_estimators=400, random_state=10)
+gbm0 = GradientBoostingClassifier(learning_rate=0.2, n_estimators=400, random_state=10)
 modelfit(gbm0, train, predictors)
 
 
-predictors = [x for x in train.columns if x not in [target]]
-param_test1 = {'n_estimators':list(range(200,601,100))}
-gsearch1 = GridSearchCV(estimator = GradientBoostingClassifier(learning_rate=0.1, min_samples_split=500,min_samples_leaf=50,max_depth=8,max_features='sqrt',subsample=0.8,random_state=10),
-param_grid = param_test1, scoring='roc_auc',n_jobs=4,iid=False, cv=5)
-gsearch1.fit(train[predictors],train[target])
-mean_list = []
-for s in gsearch1.grid_scores_:
-    mean_list.append(s[1])
-print(mean_list)
-gsearch1.grid_scores_, gsearch1.best_params_
+# predictors = [x for x in train.columns if x not in [target]]
+# param_test1 = {'n_estimators':list(range(200,601,100))}
+# gsearch1 = GridSearchCV(estimator = GradientBoostingClassifier(learning_rate=0.1, min_samples_split=500,min_samples_leaf=50,max_depth=8,max_features='sqrt',subsample=0.8,random_state=10),
+# param_grid = param_test1, scoring='roc_auc',n_jobs=4,iid=False, cv=5)
+# gsearch1.fit(train[predictors],train[target])
+# mean_list = []
+# for s in gsearch1.grid_scores_:
+#     mean_list.append(s[1])
+# print(mean_list)
+# gsearch1.grid_scores_, gsearch1.best_params_
+
+from mpl_toolkits.mplot3d import Axes3D
+import time
+start_time = time.time()
+param_test2 = {'max_depth':list(range(5,16,2)), 'min_samples_split':list(range(200,1001,200))}
+gsearch2 = GridSearchCV(estimator = GradientBoostingClassifier(learning_rate=0.2, n_estimators=400, max_features='sqrt', subsample=0.8, random_state=10),
+param_grid = param_test2, scoring='roc_auc',n_jobs=4,iid=False, cv=5)
+gsearch2.fit(train[predictors],train[target])
+x=[]
+y=[]
+z=[]
+for s in gsearch2.grid_scores_:
+    x.append(s[0]["max_depth"])
+    y.append(s[0]["min_samples_split"])
+    z.append(s[1])
+fig = plt.figure()
+ax = Axes3D(fig)
+ax.plot(x, y, z)
+plt.show()
+print('Showing results took {} secs.'.format(time.time() - start_time))
+gsearch2.grid_scores_, gsearch2.best_params_, gsearch2.best_score_
