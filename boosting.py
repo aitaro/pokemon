@@ -80,7 +80,7 @@ def modelfit(alg, dtrain, predictors, performCV=True, printFeatureImportance=Fal
 
 #Choose all predictors except target & IDcols
 predictors = [x for x in train.columns if x not in [target]]
-gbm0 = GradientBoostingClassifier(learning_rate=0.2, n_estimators=400, min_samples_split=800, max_depth=15, random_state=10)
+gbm0 = GradientBoostingClassifier(learning_rate=0.2, n_estimators=400, min_samples_split=1400, max_depth=18, min_samples_leaf=30, random_state=10)
 modelfit(gbm0, train, predictors)
 
 
@@ -97,35 +97,31 @@ modelfit(gbm0, train, predictors)
 
 from mpl_toolkits.mplot3d import Axes3D
 import time
-# start_time = time.time()
-# param_test2 = {'max_depth':list(range(5,16,2)), 'min_samples_split':list(range(200,1001,200))}
-# gsearch2 = GridSearchCV(estimator = GradientBoostingClassifier(learning_rate=0.2, n_estimators=400, max_features='sqrt', subsample=0.8, random_state=10),
-# param_grid = param_test2, scoring='roc_auc',n_jobs=4,iid=False, cv=5)
-# gsearch2.fit(train[predictors],train[target])
-# x=[]
-# y=[]
-# z=[]
-# for s in gsearch2.grid_scores_:
-#     x.append(s[0]["max_depth"])
-#     y.append(s[0]["min_samples_split"])
-#     z.append(s[1])
-# # fig = plt.figure()
-# # ax = Axes3D(fig)
-# # ax.plot(x, y, z)
-# # plt.show()
-# print('Showing results took {} secs.'.format(time.time() - start_time))
-# print(gsearch2.grid_scores_, gsearch2.best_params_, gsearch2.best_score_)
+start_time = time.time()
+param_test2 = {'max_depth':list(range(16,26,2)), 'min_samples_split':list(range(800,1601,200))}
+gsearch2 = GridSearchCV(estimator = GradientBoostingClassifier(learning_rate=0.2, n_estimators=400, min_samples_leaf=30, max_features='sqrt', subsample=0.8, random_state=10),
+param_grid = param_test2, scoring='roc_auc',n_jobs=4,iid=False, cv=5)
+gsearch2.fit(train[predictors],train[target])
+x=[]
+y=[]
+z=[]
+for s in gsearch2.grid_scores_:
+    x.append(s[0]["max_depth"])
+    y.append(s[0]["min_samples_split"])
+    z.append(s[1])
+print('Showing results took {} secs.'.format(time.time() - start_time))
+print(gsearch2.grid_scores_, gsearch2.best_params_, gsearch2.best_score_)
 
-param_test3 = {'min_samples_leaf':list(range(30,71,10))}
-gsearch3 = GridSearchCV(estimator = GradientBoostingClassifier(learning_rate=0.2, n_estimators=400, min_samples_split=800, max_depth=15,max_features='sqrt', subsample=0.8, random_state=10),
-param_grid = param_test3, scoring='roc_auc',n_jobs=4,iid=False, cv=5)
-gsearch3.fit(train[predictors],train[target])
-mean_list = []
-for s in gsearch3.grid_scores_:
-    mean_list.append(s[1])
-plt.figure(figsize=(4,2))
-plt.plot(list(range(10,51,10)), mean_list)
-plt.title("GridSearchCV Score")
-plt.xlabel("min_samples_leaf")
-plt.show()
-print(gsearch3.grid_scores_, gsearch3.best_params_, gsearch3.best_score_)
+# param_test3 = {'min_samples_leaf':list(range(10,51,10))}
+# gsearch3 = GridSearchCV(estimator = GradientBoostingClassifier(learning_rate=0.2, n_estimators=400, min_samples_split=1400, max_depth=18, max_features='sqrt', subsample=0.8, random_state=10),
+# param_grid = param_test3, scoring='roc_auc',n_jobs=4,iid=False, cv=5)
+# gsearch3.fit(train[predictors],train[target])
+# mean_list = []
+# for s in gsearch3.grid_scores_:
+#     mean_list.append(s[1])
+# plt.figure(figsize=(4,2))
+# plt.plot(list(range(10,51,10)), mean_list)
+# plt.title("GridSearchCV Score")
+# plt.xlabel("min_samples_leaf")
+# plt.show()
+# print(gsearch3.grid_scores_, gsearch3.best_params_, gsearch3.best_score_)
